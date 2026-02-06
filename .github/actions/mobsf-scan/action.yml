@@ -6,7 +6,7 @@ runs:
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: "3.10"
+        python-version: "3.8"
 
     - name: Run MobSF Security Scan
       uses: MobSF/mobsfscan@a60d10a83af68e23e0b30611c6515da604f06f65
