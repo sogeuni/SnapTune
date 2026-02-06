@@ -9,9 +9,6 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
 
     steps:
       - name: Checkout code
@@ -29,13 +26,16 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
+      - name: Install reviewdog
+        uses: reviewdog/action-setup@v1
+
       - name: Run lint
         run: ./gradlew lintDebug
 
-      - name: Run reviewdog
-        uses: reviewdog/action-androidlint@v1
+      - name: Report Android Lint Results
+        uses: ilyagulya/android-lint-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          lint_xml_file: app/build/reports/lint-results.xml
           reporter: github-pr-review
           level: warning
-          lint_result_path: "**/build/reports/lint-results-debug.xml"
