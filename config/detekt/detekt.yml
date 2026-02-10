@@ -14,22 +14,21 @@ config:
   # when writing own rules with new config properties, the edit distance between the property name and the
   # suggested property name must be less than or equal to this value.
   # default: 2
-  warningsAsErrors: false
 
 reports:
   active: true
   exclude:
-    - '**/resources/**'
-    - '**/build/**'
+    - "**/resources/**"
+    - "**/build/**"
 
 naming:
   active: true
   FunctionNaming:
     active: true
-    functionPattern: '[a-z][a-zA-Z0-9]*'
+    functionPattern: "[a-z][a-zA-Z0-9]*"
   ClassNaming:
     active: true
-    classPattern: '[A-Z][a-zA-Z0-9]*'
+    classPattern: "[A-Z][a-zA-Z0-9]*"
 
 complexity:
   active: true
