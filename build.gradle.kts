@@ -54,7 +54,19 @@ subprojects {
         reports {
             html.required.set(true)
             xml.required.set(true)
-            sarif.required.set(true)
+            sarif {
+                required.set(true)
+                outputLocation.set(rootProject.layout.buildDirectory.file("reports/detekt/detekt-${project.name}.sarif"))
+            }
+        }
+    }
+
+    plugins.withType<com.android.build.gradle.BasePlugin> {
+        extensions.configure<com.android.build.gradle.BaseExtension> {
+            lintOptions {
+                sarifReport = true
+                sarifOutput = rootProject.layout.buildDirectory.file("reports/lint/lint-${project.name}.sarif").get().asFile
+            }
         }
     }
 }
