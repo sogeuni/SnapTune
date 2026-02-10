@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.android.application) apply false
     id("org.sonarqube")
     id("jacoco")
+    alias(libs.plugins.detekt)
 }
 
 allprojects {
@@ -38,6 +39,22 @@ subprojects {
         executionData.setFrom(fileTree(project.buildDir) {
             include("jacoco/testDebugUnitTest.exec", "jacoco/test.exec")
         })
+    }
+
+    apply(plugin = "io.gitlab.arturbosch.detekt")
+    detekt {
+        toolVersion = "1.23.7"
+        buildUponDefaultConfig = true
+        allRules = false
+        config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
+    }
+
+    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+        reports {
+            html.required.set(true)
+            xml.required.set(true)
+            sarif.required.set(true)
+        }
     }
 }
 

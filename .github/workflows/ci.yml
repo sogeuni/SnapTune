@@ -31,7 +31,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # SonarCloud needs full history
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -42,23 +42,43 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5.0.1
 
-      - name: Install reviewdog for Lint
-        uses: reviewdog/action-setup@v1
+      - name: Dependency Review
+        if: github.event_name == 'pull_request'
+        uses: actions/dependency-review-action@v4
 
-      - name: Run Build, Lint, Test and Sonar
-        run: ./gradlew build lint jacocoTestReport sonar
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: java-kotlin
+
+      - name: Run Build, Lint, Test, Detekt and Sonar
+        run: ./gradlew build lint detekt jacocoTestReport sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Report Android Lint Results
-        uses: ilyagulya/android-lint-action@v0.12.1
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+      - name: Upload Detekt SARIF
+        uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          lint_xml_file: shared/build/reports/lint-results-debug.xml
-          reporter: github-pr-review
-          level: warning
+          sarif_file: "**/build/reports/detekt/detekt.sarif"
+
+      - name: Convert Android Lint to SARIF
+        uses: dev-drprasad/android-lint-report-action@v1
+        if: always()
+        with:
+          report_path: "**/build/reports/lint-results-*.xml"
+          format: "sarif"
+          output: "android-lint.sarif"
+
+      - name: Upload Android Lint SARIF
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: android-lint.sarif
 
       - name: MobSF Security Scan
         uses: ./.github/actions/mobsf-scan
