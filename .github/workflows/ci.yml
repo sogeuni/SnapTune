@@ -66,19 +66,11 @@ jobs:
         with:
           sarif_file: "**/build/reports/detekt/detekt.sarif"
 
-      - name: Convert Android Lint to SARIF
-        uses: dev-drprasad/android-lint-report-action@v1
-        if: always()
-        with:
-          report_path: "**/build/reports/lint-results-*.xml"
-          format: "sarif"
-          output: "android-lint.sarif"
-
       - name: Upload Android Lint SARIF
         uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
-          sarif_file: android-lint.sarif
+          sarif_file: "**/build/reports/lint-results-*.sarif"
 
       - name: MobSF Security Scan
         uses: ./.github/actions/mobsf-scan
