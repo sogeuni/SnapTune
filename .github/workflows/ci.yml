@@ -52,7 +52,7 @@ jobs:
           languages: java-kotlin
 
       - name: Run Build, Lint, Test, Detekt and Sonar
-        run: ./gradlew build lint detekt jacocoTestReport sonar
+        run: ./gradlew build --scan lint detekt jacocoTestReport sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
