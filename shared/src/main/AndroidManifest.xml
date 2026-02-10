@@ -13,6 +13,7 @@
             android:name="dev.sogn.snaptune.shared.SnapTuneService"
             android:exported="true">
             <intent-filter>
+                <action android:name="androidx.media3.session.MediaSessionService" />
                 <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>
         </service>
