@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sogeuni.snaptune.shared"
+    namespace = "dev.sogn.snaptune.shared"
     compileSdk = 36
 
     defaultConfig {
