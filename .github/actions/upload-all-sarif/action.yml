@@ -1,0 +1,49 @@
+name: "Upload All SARIF Reports"
+description: "Collects and uploads Detekt and Android Lint SARIF reports from all modules"
+
+runs:
+  using: "composite"
+  steps:
+    # Upload Detekt SARIFs
+    - name: Upload Detekt SARIF (mobile)
+      uses: github/codeql-action/upload-sarif@v4
+      if: always()
+      with:
+        sarif_file: mobile/build/reports/detekt/detekt.sarif
+        category: detekt-mobile
+
+    - name: Upload Detekt SARIF (automotive)
+      uses: github/codeql-action/upload-sarif@v4
+      if: always()
+      with:
+        sarif_file: automotive/build/reports/detekt/detekt.sarif
+        category: detekt-automotive
+
+    - name: Upload Detekt SARIF (shared)
+      uses: github/codeql-action/upload-sarif@v4
+      if: always()
+      with:
+        sarif_file: shared/build/reports/detekt/detekt.sarif
+        category: detekt-shared
+
+    # Upload Android Lint SARIFs
+    - name: Upload Android Lint SARIF (mobile)
+      uses: github/codeql-action/upload-sarif@v4
+      if: always()
+      with:
+        sarif_file: mobile/build/reports/lint-results-debug.sarif
+        category: lint-mobile
+
+    - name: Upload Android Lint SARIF (automotive)
+      uses: github/codeql-action/upload-sarif@v4
+      if: always()
+      with:
+        sarif_file: automotive/build/reports/lint-results-debug.sarif
+        category: lint-automotive
+
+    - name: Upload Android Lint SARIF (shared)
+      uses: github/codeql-action/upload-sarif@v4
+      if: always()
+      with:
+        sarif_file: shared/build/reports/lint-results-debug.sarif
+        category: lint-shared

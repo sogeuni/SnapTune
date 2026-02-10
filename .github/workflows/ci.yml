@@ -60,11 +60,9 @@ jobs:
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
 
-      - name: Upload SARIF reports
-        uses: github/codeql-action/upload-sarif@v4
+      - name: Upload all SARIF reports
+        uses: ./.github/actions/upload-all-sarif
         if: always()
-        with:
-          sarif_file: build/reports
 
       - name: MobSF Security Scan
         uses: ./.github/actions/mobsf-scan
