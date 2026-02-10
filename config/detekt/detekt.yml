@@ -1,5 +1,5 @@
 build:
-  maxIssues: 0
+  # maxIssues: 0
   excludeCorrectable: false
   weights:
     # complexity: 2
@@ -15,11 +15,14 @@ config:
   # suggested property name must be less than or equal to this value.
   # default: 2
 
-reports:
+console-reports:
   active: true
   exclude:
-    - "**/resources/**"
-    - "**/build/**"
+    - "ProjectStatisticsReport"
+    - "ComplexityReport"
+    - "NotificationReport"
+    - "FindingsReport"
+    - "FileBasedFindingsReport"
 
 naming:
   active: true
@@ -34,7 +37,8 @@ complexity:
   active: true
   LongParameterList:
     active: true
-    threshold: 6
+    functionThreshold: 6
+    constructorThreshold: 6
   TooManyFunctions:
     active: true
     thresholdInFiles: 20

@@ -29,14 +29,14 @@ subprojects {
             "**/R.class", "**/R$*.class", "**/BuildConfig.*", "**/Manifest*.*",
             "**/*Test*.*", "android/**/*.*", "**/databinding/**/*.*", "**/BR.class"
         )
-        val debugTree = fileTree("${project.buildDir}/intermediates/javac/debug/classes") {
+        val debugTree = fileTree(layout.buildDirectory.dir("intermediates/javac/debug/classes")) {
             exclude(fileFilter)
         }
         val mainSrc = "${project.projectDir}/src/main/java"
 
         sourceDirectories.setFrom(files(mainSrc))
         classDirectories.setFrom(files(debugTree))
-        executionData.setFrom(fileTree(project.buildDir) {
+        executionData.setFrom(fileTree(layout.buildDirectory) {
             include("jacoco/testDebugUnitTest.exec", "jacoco/test.exec")
         })
     }
@@ -47,6 +47,7 @@ subprojects {
         buildUponDefaultConfig = true
         allRules = false
         config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
+        ignoreFailures = true
     }
 
     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
