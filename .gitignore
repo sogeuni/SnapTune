@@ -9,6 +9,7 @@
 /.idea/assetWizardSettings.xml
 /.idea/emulatorDisplays.xml
 /.idea/misc.xml
+/.idea/sonarlint.xml
 .DS_Store
 /build
 /captures

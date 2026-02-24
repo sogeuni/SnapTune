@@ -1,6 +1,7 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+// Top-level build file where you can add configuration options common to all subprojects/modules.
 plugins {
     alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
     id("org.sonarqube")
     id("jacoco")
     alias(libs.plugins.detekt)
@@ -12,6 +13,8 @@ allprojects {
 
 subprojects {
     tasks.register<JacocoReport>("jacocoTestReport") {
+        description = "Generate Jacoco coverage reports into the 'reports/jacoco' directory."
+        group = "Reporting"
         val testTaskName = if (plugins.hasPlugin("com.android.application") || plugins.hasPlugin("com.android.library")) {
             "testDebugUnitTest"
         } else {

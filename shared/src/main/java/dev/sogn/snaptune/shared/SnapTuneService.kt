@@ -37,7 +37,7 @@ class SnapTuneService : MediaLibraryService() {
             pageSize: Int,
             params: LibraryParams?
         ): ListenableFuture<LibraryResult<ImmutableList<MediaItem>>> {
-            return Futures.immediateFuture(LibraryResult.ofItemList(ImmutableList.of(), params))
+            return Futures.immediateFuture(LibraryResult.ofItemList(listOf(), params))
         }
     }
 
