@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tab_streaming">스트리밍</string>
+    <string name="tab_podcast">팟캐스트</string>
+</resources>
