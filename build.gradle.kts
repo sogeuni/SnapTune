@@ -7,6 +7,11 @@ plugins {
     alias(libs.plugins.detekt)
 }
 
+repositories {
+    google()
+    mavenCentral()
+}
+
 allprojects {
     apply(plugin = "jacoco")
 }

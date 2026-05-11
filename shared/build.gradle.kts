@@ -2,9 +2,14 @@ plugins {
     alias(libs.plugins.android.library)
 }
 
+repositories {
+    google()
+    mavenCentral()
+}
+
 android {
     namespace = "dev.sogn.snaptune.shared"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 26
