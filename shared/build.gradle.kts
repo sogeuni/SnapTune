@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.ksp)
 }
 
 repositories {
@@ -36,6 +37,10 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.session)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.work.runtime)
+    ksp(libs.androidx.room.compiler)
 }

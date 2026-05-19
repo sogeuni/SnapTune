@@ -1,11 +1,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <application android:appCategory="audio">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+
+    <!-- FIXME: disable cleartext traffic, backup settings -->
+    <application
+        android:allowBackup="true"
+        android:appCategory="audio"
+        android:usesCleartextTraffic="true">
 
         <meta-data
             android:name="com.google.android.gms.car.application"
             android:resource="@xml/automotive_app_desc" />
+
+        <provider
+            android:name="dev.sogn.snaptune.shared.PodcastArtworkProvider"
+            android:authorities="${applicationId}.artwork"
+            android:exported="true"
+            android:grantUriPermissions="true"
+            tools:ignore="ExportedContentProvider" />
 
         <!-- Main music service, provides media browsing and media playback services to
          consumers through MediaBrowserService and MediaSession. Consumers connect to it through
@@ -13,6 +28,7 @@
         <service
             android:name="dev.sogn.snaptune.shared.SnapTuneService"
             android:exported="true"
+            android:foregroundServiceType="mediaPlayback"
             tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="androidx.media3.session.MediaLibraryService" />

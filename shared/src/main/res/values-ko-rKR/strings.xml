@@ -2,4 +2,8 @@
 <resources>
     <string name="tab_streaming">스트리밍</string>
     <string name="tab_podcast">팟캐스트</string>
+    <string name="podcast_feed_label">팟캐스트 피드</string>
+    <string name="podcast_episode_label">팟캐스트 에피소드</string>
+    <string name="podcast_recent_updates">최근 업데이트</string>
+    <string name="podcast_recent_updates_description">모든 팟캐스트의 최신 에피소드</string>
 </resources>

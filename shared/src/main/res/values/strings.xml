@@ -2,4 +2,8 @@
 <resources>
     <string name="tab_streaming">Streaming</string>
     <string name="tab_podcast">Podcast</string>
+    <string name="podcast_feed_label">Podcast feed</string>
+    <string name="podcast_episode_label">Podcast episode</string>
+    <string name="podcast_recent_updates">Recent updates</string>
+    <string name="podcast_recent_updates_description">Latest episodes from all podcast feeds</string>
 </resources>
