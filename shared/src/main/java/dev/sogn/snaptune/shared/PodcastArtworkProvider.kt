@@ -37,8 +37,7 @@ class PodcastArtworkProvider : ContentProvider() {
 
     override fun openFile(uri: Uri, mode: String): ParcelFileDescriptor {
         check(mode == "r") { "Read-only provider" }
-        val file = artworkCache.resolveCachedFile(uri)
-            ?: throw FileNotFoundException("No cached artwork for $uri")
-        return ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+        return artworkCache.openCachedFile(uri)
+            ?: throw FileNotFoundException("No cached artwork")
     }
 }

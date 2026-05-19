@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.ParcelFileDescriptor
 import androidx.core.graphics.scale
 import java.io.File
 import java.io.IOException
@@ -32,8 +33,8 @@ class PodcastArtworkCache private constructor(context: Context) {
     }
 
     fun resolveCachedFile(uri: Uri): File? {
-        val key = uri.pathSegments.firstOrNull()?.takeIf { it.isNotBlank() } ?: return null
-        val targetFile = fileForKey(key)
+        val key = uri.pathSegments.firstOrNull()?.takeIf(::isValidCacheKey) ?: return null
+        val targetFile = fileForKey(key) ?: return null
         if (targetFile.isFile && targetFile.length() > 0L) {
             return targetFile
         }
@@ -47,7 +48,22 @@ class PodcastArtworkCache private constructor(context: Context) {
         }.getOrNull()
     }
 
-    private fun fileForKey(key: String): File = File(artworkDirectory, key)
+    @Throws(IOException::class)
+    fun openCachedFile(uri: Uri): ParcelFileDescriptor? {
+        val file = resolveCachedFile(uri) ?: return null
+        return ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+    }
+
+    private fun fileForKey(key: String): File? {
+        if (!isValidCacheKey(key)) {
+            return null
+        }
+
+        val file = File(artworkDirectory, key)
+        val basePath = artworkDirectory.canonicalFile.toPath()
+        val candidatePath = file.canonicalFile.toPath()
+        return file.takeIf { candidatePath.startsWith(basePath) }
+    }
 
     @Throws(IOException::class)
     private fun downloadToFile(sourceUrl: String, targetFile: File, sizePixels: Int?) {
@@ -168,12 +184,12 @@ class PodcastArtworkCache private constructor(context: Context) {
         if (!sourceFile.delete()) {
             val rollbackException =
                 if (!targetFile.delete() && targetFile.exists()) {
-                    IOException("Failed to roll back target file: ${targetFile.absolutePath}")
+                    IOException("Failed to roll back copied artwork file")
                 } else {
                     null
                 }
 
-            throw IOException("Failed to delete source file: ${sourceFile.absolutePath}").apply {
+            throw IOException("Failed to delete temporary artwork source file").apply {
                 rollbackException?.let(::addSuppressed)
             }
         }
@@ -206,6 +222,7 @@ class PodcastArtworkCache private constructor(context: Context) {
         private const val QUERY_SOURCE_URL = "source"
         private const val QUERY_SIZE_PIXELS = "size"
         private const val JPEG_QUALITY = 90
+        private val CACHE_KEY_REGEX = Regex("^[0-9a-f]{64}$")
 
         @Volatile
         private var instance: PodcastArtworkCache? = null
@@ -217,5 +234,7 @@ class PodcastArtworkCache private constructor(context: Context) {
         }
 
         fun authority(context: Context): String = "${context.packageName}.artwork"
+
+        private fun isValidCacheKey(key: String): Boolean = CACHE_KEY_REGEX.matches(key)
     }
 }
